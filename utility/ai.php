@@ -17,12 +17,14 @@ add_action('wp_ajax_classify_topics', function() {
     }
     $topics_text = implode("\n", $topic_names);
 
+    $api_key = ai_seo_get_api_key();
+
     // Prepare prompt for classification
     $prompt = "Classify the following topics into categories such as 'What-based', 'How-based', 'Where-based', 'When-based', 'Brief Information-based', 'List-based', etc. Return a JSON object where keys are category names and values are arrays of topics that fall under that category.\n\nTopics:\n" . $topics_text;
 
     $response = wp_remote_post('https://api.openai.com/v1/chat/completions', [
         'headers' => [
-            'Authorization' => $saved_key,
+            'Authorization' => 'Bearer ' . $api_key,
             'Content-Type'  => 'application/json'
         ],
         'body' => json_encode([
@@ -108,7 +110,7 @@ add_action('wp_ajax_generate_content', function() {
             // Generate SEO-optimized content using OpenAI
             $response = wp_remote_post('https://api.openai.com/v1/chat/completions', [
                 'headers' => [
-                    'Authorization' => $saved_key,
+                    'Authorization' => 'Bearer ' . $api_key,
                     'Content-Type'  => 'application/json'
                 ],
                 'body' => json_encode([
