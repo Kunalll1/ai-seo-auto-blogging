@@ -18,6 +18,11 @@ add_action('wp_ajax_classify_topics', function() {
     $topics_text = implode("\n", $topic_names);
 
     $api_key = ai_seo_get_api_key();
+    
+    // Debugging: Check if API key is retrieved
+    if (empty($api_key)) {
+        wp_send_json_error('API key is missing. Please ensure it is set correctly.');
+    }
 
     // Prepare prompt for classification
     $prompt = "Classify the following topics into categories such as 'What-based', 'How-based', 'Where-based', 'When-based', 'Brief Information-based', 'List-based', etc. Return a JSON object where keys are category names and values are arrays of topics that fall under that category.\n\nTopics:\n" . $topics_text;
@@ -91,6 +96,13 @@ add_action('wp_ajax_generate_content', function() {
     }
 
     $results = array();
+
+    $api_key = ai_seo_get_api_key();
+    
+    // Debugging: Check if API key is retrieved
+    if (empty($api_key)) {
+        wp_send_json_error('API key is missing. Please ensure it is set correctly.');
+    }
 
     // Loop through each theme and its topics
     foreach ($classification as $theme => $theme_topics) {
